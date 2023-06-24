@@ -311,6 +311,61 @@ public class BLEPrinterAdapter implements PrinterAdapter{
 
     }
 
+    @Override
+    public void printImageData2(String imageUrl, Callback errorCallback) {
+
+        final Bitmap bitmapImage = getBitmapFromURL(imageUrl);
+
+        if (bitmapImage == null) {
+            errorCallback.invoke("Imagen no encontrada");
+            return;
+        }
+        if(this.mBluetoothSocket == null){
+            errorCallback.invoke("la conexion bluetooth no se construyo, talvez olvidaste conectar la impresora");
+            return;
+        }
+
+        final BluetoothSocket socket = this.mBluetoothSocket;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+        try {
+            int[][] pixels = getPixelsSlow(bitmapImage);
+
+            OutputStream printerOutputStream = socket.getOutputStream();
+            
+            printerOutputStream.write(SET_LINE_SPACE_24);
+            printerOutputStream.write(CENTER_ALIGN);
+
+            for (int y = 0; y < pixels.length; y += 24) {
+                // despues de enviar la data
+                // la impresora continuara imprimiento texto como normalmente lo hace
+                printerOutputStream.write(SELECT_BIT_IMAGE_MODE);
+                // Set nL and nH based on the width of the image
+                printerOutputStream.write(
+                        new byte[] { (byte) (0x00ff & pixels[y].length), (byte) ((0xff00 & pixels[y].length) >> 8) });
+                for (int x = 0; x < pixels[y].length; x++) {
+                    // para cada pixe, se recolecta 3 bytes (3 bytes = 24 bits)
+                    printerOutputStream.write(recollectSlice(y, x, pixels));
+                }
+
+                // una alimentacion de linea, de lo contrario la impresora seguira en la misma linea
+                printerOutputStream.write(LINE_FEED);
+            }
+            printerOutputStream.write(SET_LINE_SPACE_32);
+            printerOutputStream.write(LINE_FEED);
+
+            printerOutputStream.flush();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Fallo impresion de los datos");
+            e.printStackTrace();
+        }
+    }
+}).start();
+
+    }
+
+
 
     @Override
     public void printQrCode(String qrCode, Callback errorCallback) {
