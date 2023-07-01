@@ -74,6 +74,12 @@ public class RNBLEPrinterModule extends ReactContextBaseJavaModule implements RN
     }
     @ReactMethod
     @Override
+    public void printImageData2(String imageUrl, Callback errorCallback) {
+        adapter.printImageData2(imageUrl, errorCallback);
+    }
+
+    @ReactMethod
+    @Override
     public void printQrCode(String qrCode, Callback errorCallback) {
         adapter.printQrCode(qrCode, errorCallback);
     }

@@ -97,6 +97,12 @@ export var USBPrinter = {
             return console.warn(error);
         });
     },
+    printImage2: function (imgUrl, opts) {
+        if (opts === void 0) { opts = {}; }
+        return RNUSBPrinter.printImageData2(imgUrl, function (error) {
+            return console.warn(error);
+        });
+    },
     printQrCode: function (qrCode, opts) {
         if (opts === void 0) { opts = {}; }
         return RNUSBPrinter.printQrCode(qrCode, function (error) {
@@ -158,6 +164,18 @@ export var BLEPrinter = {
         }
         else {
             RNBLEPrinter.printImageData(imgUrl, function (error) {
+                return console.warn(error);
+            });
+        }
+    },
+    printImage2: function (imgUrl, opts) {
+        if (opts === void 0) { opts = {}; }
+        if (Platform.OS === "ios") {
+            console.log("printImage is not supported on iOS");
+            RNBLEPrinter.printImageData2(imgUrl, opts, function (error) { return console.warn(error); });
+        }
+        else {
+            RNBLEPrinter.printImageData2(imgUrl, function (error) {
                 return console.warn(error);
             });
         }

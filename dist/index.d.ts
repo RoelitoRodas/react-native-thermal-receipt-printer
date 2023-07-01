@@ -27,6 +27,7 @@ export declare const USBPrinter: {
     printText: (text: string, opts?: PrinterOptions) => void;
     printBill: (text: string, opts?: PrinterOptions) => void;
     printImage: (imgUrl: string, opts?: {}) => void;
+    printImage2: (imgUrl: string, opts?: {}) => void;
     printQrCode: (qrCode: string, opts?: {}) => void;
 };
 export declare const BLEPrinter: {
@@ -37,6 +38,7 @@ export declare const BLEPrinter: {
     printText: (text: string, opts?: PrinterOptions) => void;
     printBill: (text: string, opts?: PrinterOptions) => void;
     printImage: (imgUrl: string, opts?: {}) => void;
+    printImage2: (imgUrl: string, opts?: {}) => void;
     printQrCode: (qrCode: string, opts?: {}) => void;
 };
 export declare const NetPrinter: {
@@ -47,6 +49,7 @@ export declare const NetPrinter: {
     printText: (text: string, opts?: {}) => void;
     printBill: (text: string, opts?: {}) => void;
     printImage: (imgUrl: string, opts?: {}) => void;
+    printImage2: (imgUrl: string, opts?: {}) => void;
     printQrCode: (qrCode: string, opts?: {}) => void;
 };
 export declare const NetPrinterEventEmitter: NativeEventEmitter;
